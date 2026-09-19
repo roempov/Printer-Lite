@@ -1,0 +1,264 @@
+import 'package:blue_print_pos/blue_print_pos.dart';
+import 'package:blue_print_pos/models/blue_device.dart';
+import 'package:blue_print_pos/models/connection_status.dart';
+import 'package:blue_print_pos/receipt/receipt_section_text.dart';
+import 'package:blue_print_pos/receipt/receipt_text_size_type.dart';
+import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import '../bluetooth_permission.dart';
+import '../preference.dart';
+
+class Setting extends StatefulWidget {
+  const Setting({Key? key}) : super(key: key);
+
+  @override
+  State<Setting> createState() => _SettingState();
+}
+
+class _SettingState extends State<Setting> {
+  final BluePrintPos _bluePrintPos = BluePrintPos.instance;
+  List<BlueDevice> _blueDevices = <BlueDevice>[];
+  BlueDevice? _selectedDevice;
+  bool _isLoading = false;
+  int _loadingAtIndex = -1;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: const Color(0xB3D8D8D8),
+      appBar: AppBar(
+        backgroundColor: Colors.black87,
+      ),
+      body: Center(
+        child: Container(
+          alignment: Alignment.topLeft,
+          padding: const EdgeInsets.only(top: 30, left: 25, right: 25),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              SafeArea(
+                child: _isLoading && _blueDevices.isEmpty
+                    ? const Center(
+                        child: CircularProgressIndicator(
+                          valueColor:
+                              AlwaysStoppedAnimation<Color>(Colors.blue),
+                        ),
+                      )
+                    : _blueDevices.isNotEmpty
+                        ? SingleChildScrollView(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Column(
+                                  children: List<Widget>.generate(
+                                      _blueDevices.length, (int index) {
+                                    return Row(
+                                      children: <Widget>[
+                                        Expanded(
+                                          child: GestureDetector(
+                                            onTap: _blueDevices[index]
+                                                        .address ==
+                                                    (_selectedDevice?.address ??
+                                                        '')
+                                                ? _onDisconnectDevice
+                                                : () => _onSelectDevice(index),
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: <Widget>[
+                                                  Text(
+                                                    _blueDevices[index].name,
+                                                    style: TextStyle(
+                                                      color: _selectedDevice
+                                                                  ?.address ==
+                                                              _blueDevices[
+                                                                      index]
+                                                                  .address
+                                                          ? Colors.blue
+                                                          : Colors.black,
+                                                      fontSize: 20,
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                    ),
+                                                  ),
+                                                  Text(
+                                                    _blueDevices[index].address,
+                                                    style: TextStyle(
+                                                      color: _selectedDevice
+                                                                  ?.address ==
+                                                              _blueDevices[
+                                                                      index]
+                                                                  .address
+                                                          ? Colors.blueGrey
+                                                          : Colors.grey,
+                                                      fontSize: 14,
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        if (_loadingAtIndex == index &&
+                                            _isLoading)
+                                          Container(
+                                            height: 24.0,
+                                            width: 24.0,
+                                            margin: const EdgeInsets.only(
+                                                right: 8.0),
+                                            child:
+                                                const CircularProgressIndicator(
+                                              valueColor:
+                                                  AlwaysStoppedAnimation<Color>(
+                                                Colors.blue,
+                                              ),
+                                            ),
+                                          ),
+                                        if (!_isLoading &&
+                                            _blueDevices[index].address ==
+                                                (_selectedDevice?.address ??
+                                                    ''))
+                                          TextButton(
+                                            onPressed: _startPrint,
+                                            style: ButtonStyle(
+                                              backgroundColor:
+                                                  MaterialStateProperty
+                                                      .resolveWith<Color>(
+                                                (Set<MaterialState> states) {
+                                                  if (states.contains(
+                                                      MaterialState.pressed)) {
+                                                    return Theme.of(context)
+                                                        .colorScheme
+                                                        .primary
+                                                        .withOpacity(0.5);
+                                                  }
+                                                  return Theme.of(context)
+                                                      .primaryColor;
+                                                },
+                                              ),
+                                            ),
+                                            child: const Text(
+                                              'Test Print',
+                                              style: TextStyle(
+                                                  color: Colors.white),
+                                            ),
+                                          ),
+                                      ],
+                                    );
+                                  }),
+                                ),
+                              ],
+                            ),
+                          )
+                        : Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: const <Widget>[
+                                Text(
+                                  'Scan Bluetooth Device',
+                                  style: TextStyle(
+                                      fontSize: 24),
+                                ),
+                                Text(
+                                  'Press Button Scan',
+                                  style: TextStyle(
+                                      fontSize: 14, color: Colors.grey),
+                                ),
+                              ],
+                            ),
+                          ),
+              ),
+              const SizedBox(height: 100),
+              ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(18))),
+                  onPressed: _isLoading ? null : _onScanPressed,
+                  child: const Text('SCAN')),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _onDisconnectDevice() {
+    _bluePrintPos.disconnect().then((ConnectionStatus status) {
+      if (status == ConnectionStatus.disconnect) {
+        setState(() {
+          showToast('Printer may turned off');
+          _selectedDevice = null;
+        });
+      }
+    });
+  }
+
+  Future<void> _onScanPressed() async {
+    setState(() => _isLoading = true);
+
+    final granted = await requestBluetoothPermissions();
+    if (!granted) {
+      setState(() => _isLoading = false);
+      showToast('សូមអនុញ្ញាត Bluetooth និង Location');
+      return;
+    }
+
+    try {
+      final devices = await _bluePrintPos.scan().timeout(
+        const Duration(seconds: 6),
+        onTimeout: () => <BlueDevice>[],
+      );
+      if (devices.isNotEmpty) {
+        setState(() {
+          _blueDevices = devices;
+          _isLoading = false;
+        });
+      } else {
+        setState(() => _isLoading = false);
+        showToast('Please turn on Bluetooth');
+      }
+    } catch (e) {
+      setState(() => _isLoading = false);
+      showToast('ស្កេនបរាជ័យ: $e'); // TEMPORARY — shows the real error, remove the ": $e" once confirmed working
+    }
+  }
+  void _onSelectDevice(int index) {
+    setState(() {
+      _isLoading = true;
+      _loadingAtIndex = index;
+    });
+    final BlueDevice blueDevice = _blueDevices[index];
+    _bluePrintPos.connect(blueDevice).then((ConnectionStatus status) {
+      if (status == ConnectionStatus.connected) {
+        setState(() => _selectedDevice = blueDevice);
+
+        final address = _blueDevices[index].address;
+        setDeviceAddress(address);
+      } else if (status == ConnectionStatus.timeout) {
+        _onDisconnectDevice();
+      } else {
+        showToast('Something went wrong');
+      }
+      setState(() => _isLoading = false);
+    });
+  }
+
+  Future<void> _startPrint() async {
+    final String formatDate = DateFormat.yMd().add_jm().format(DateTime.now());
+    final ReceiptSectionText receiptText = ReceiptSectionText();
+    receiptText.addLeftRightText(formatDate, 'OK',
+        leftSize: ReceiptTextSizeType.small,
+        rightSize: ReceiptTextSizeType.small);
+    receiptText.addSpacer(useDashed: true);
+
+    showToast('Printing...',color: Colors.green);
+    await _bluePrintPos.printReceiptText(receiptText);
+    await _bluePrintPos.disconnect();
+  }
+}
