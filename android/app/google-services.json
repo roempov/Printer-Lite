@@ -1,36 +1,26 @@
 {
   "project_info": {
-    "project_number": "965058635381",
-    "project_id": "sale-history-79eb4",
-    "storage_bucket": "sale-history-79eb4.appspot.com"
+    "project_number": "1085126025847",
+    "project_id": "printer-lite",
+    "storage_bucket": "printer-lite.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:965058635381:android:051b2a3e94dcfd48a7ba3c",
+        "mobilesdk_app_id": "1:1085126025847:android:392157b913411931459c72",
         "android_client_info": {
-          "package_name": "com.mrpov.final_printer"
+          "package_name": "com.mrpov.printer_lite"
         }
       },
-      "oauth_client": [
-        {
-          "client_id": "965058635381-8ccq1sh0m93qnb7p5jkso2h59hbn354v.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
+      "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyDb21mUbFQJv2vQI0_Nh3I3D_jFvy_PQ5g"
+          "current_key": "AIzaSyAw7nkO0Kyb-ZtVvdoFSPs9buXfgsbaWkM"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "965058635381-8ccq1sh0m93qnb7p5jkso2h59hbn354v.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
+          "other_platform_oauth_client": []
         }
       }
     }

@@ -49,20 +49,20 @@ MaskTextInputFormatter buildMaskFormat() {
 }
 
 class AddFireStore {
-  final String _dateOrder =
+  final String _sortDate =
       DateFormat('yy-MM-dd HHmmss').format(DateTime.now());
 
   Future city(String address, String amount, String phoneNumber,
       String dateTime) async {
-    final CollectionReference products =
-        FirebaseFirestore.instance.collection('products');
+    final CollectionReference collCod =
+        FirebaseFirestore.instance.collection('cod');
 
-    await products.add({
+    await collCod.add({
       "address": address,
       "price": amount,
       "phone": phoneNumber,
       "date": dateTime,
-      "order": _dateOrder
+      "sort": _sortDate
     });
   }
 
@@ -72,15 +72,15 @@ class AddFireStore {
     String delivery,
     String dateTime,
   ) async {
-    final CollectionReference products =
+    final CollectionReference collPro =
         FirebaseFirestore.instance.collection('province');
 
-    await products.add({
-      "receiver": receiverNum,
+    await collPro.add({
+      "phone": receiverNum,
       "destination": destination,
       "deliver": delivery,
       "date": dateTime,
-      "order": _dateOrder
+      "sort": _sortDate
     });
   }
 }

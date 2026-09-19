@@ -35,7 +35,7 @@ class PrintProvince extends PrinterJob {
     final receipt = ReceiptSectionText();
 
     receipt.addText(
-      'Nana Online Shop',
+      'Niza Shop',
       alignment: ReceiptAlignment.center,
       size: ReceiptTextSizeType.extraLarge,
       style: ReceiptTextStyleType.bold,

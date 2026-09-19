@@ -1,6 +1,6 @@
 # final_printer
 
-A new Flutter project. final
+A new Flutter project. App name: PrintLite
 
 ## Getting Started
 
