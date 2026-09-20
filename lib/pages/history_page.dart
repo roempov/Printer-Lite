@@ -73,16 +73,16 @@ class _HistoryPageState extends State<HistoryPage> {
   }
 
   void _initTodayStream() {
-    _collection.orderBy('order', descending: true).limit(1).get().then((snap) {
+    _collection.orderBy('sort', descending: true).limit(1).get().then((snap) {
       if (snap.docs.isEmpty) return;
       final latestOrder =
-          _field(snap.docs.first.data() as Map<String, dynamic>, 'order');
+          _field(snap.docs.first.data() as Map<String, dynamic>, 'sort');
       if (latestOrder.length < 8) return;
       final day = latestOrder.substring(0, 8);
       if (mounted) {
         setState(() {
           _todayStream = _collection
-              .orderBy('order')
+              .orderBy('sort')
               .startAt(['$day 000000'])
               .endAt(['$day 999999'])
               .snapshots()
@@ -94,7 +94,7 @@ class _HistoryPageState extends State<HistoryPage> {
 
   Future<void> _preloadDays() async {
     final snap =
-        await _collection.orderBy('order', descending: true).limit(600).get();
+        await _collection.orderBy('sort', descending: true).limit(600).get();
     _cachedDays = _extractDays(snap);
     if (mounted) setState(() => _daysLoaded = true);
   }
@@ -102,7 +102,7 @@ class _HistoryPageState extends State<HistoryPage> {
   List<String> _extractDays(QuerySnapshot snap) {
     final Set<String> days = {};
     for (final doc in snap.docs) {
-      final order = _field(doc.data() as Map<String, dynamic>, 'order');
+      final order = _field(doc.data() as Map<String, dynamic>, 'sort');
       if (order.length >= 8) days.add(order.substring(0, 8));
     }
     return days.toList()..sort((a, b) => b.compareTo(a));
@@ -110,7 +110,7 @@ class _HistoryPageState extends State<HistoryPage> {
 
   Stream<int> _filteredCountStream(String day) {
     return _collection
-        .orderBy('order')
+        .orderBy('sort')
         .startAt(['$day 000000'])
         .endAt(['$day 999999'])
         .snapshots()
@@ -119,11 +119,11 @@ class _HistoryPageState extends State<HistoryPage> {
 
   Stream<QuerySnapshot> _listStream() {
     if (_filterDay != null) {
-      return _collection.orderBy('order', descending: true).startAt(
+      return _collection.orderBy('sort', descending: true).startAt(
           ['$_filterDay 999999']).endAt(['$_filterDay 000000']).snapshots();
     }
     return _collection
-        .orderBy('order', descending: true)
+        .orderBy('sort', descending: true)
         .limit(_limit)
         .snapshots();
   }
@@ -138,7 +138,7 @@ class _HistoryPageState extends State<HistoryPage> {
 
     if (!_daysLoaded) {
       final snap =
-          await _collection.orderBy('order', descending: true).limit(300).get();
+          await _collection.orderBy('sort', descending: true).limit(300).get();
       _cachedDays = _extractDays(snap);
       _daysLoaded = true;
     }

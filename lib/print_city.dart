@@ -10,7 +10,7 @@ import 'preference.dart';
 class PrintCity extends PrinterJob {
   final String phoneNumber;
   final String address;
-  final String amount;     // USD result  e.g. "4.88$"
+  final String amount; // USD result  e.g. "4.88$"
   final String amountRiel; // Riel input  e.g. "20,000"
   final VoidCallback? onSuccess;
 
@@ -23,7 +23,7 @@ class PrintCity extends PrinterJob {
   });
 
   final String _dateTime =
-  DateFormat('dd/MM/yyyy hh:mm a').format(DateTime.now());
+      DateFormat('dd/MM/yyyy hh:mm a').format(DateTime.now());
 
   @override
   String get disconnectMessage => 'បិទ បើកម៉ាស៊ីន ព្រីន';
@@ -33,27 +33,30 @@ class PrintCity extends PrinterJob {
     final receipt = ReceiptSectionText();
 
     receipt.addLeftRightText(
-      'COD', 'Niza Shop',
+      'COD',
+      'Niza Shop',
       leftSize: ReceiptTextSizeType.medium,
       rightSize: ReceiptTextSizeType.small,
     );
     receipt.addSpacer(useDashed: true);
 
     receipt.addLeftRightText(
-      'លេខអ្នកផ្ញើ', '',
+      'លេខអ្នកផ្ញើ',
+      '',
       leftSize: ReceiptTextSizeType.small,
       rightSize: ReceiptTextSizeType.small,
     );
     receipt.addSpacer();
     receipt.addText(
-      '087 959 504',
+      '096 700 3269',
       alignment: ReceiptAlignment.center,
       size: ReceiptTextSizeType.medium,
       style: ReceiptTextStyleType.normal,
     );
 
     receipt.addLeftRightText(
-      'អ្នកទទួល', '',
+      'អ្នកទទួល',
+      '',
       leftSize: ReceiptTextSizeType.small,
       rightSize: ReceiptTextSizeType.small,
     );
@@ -66,7 +69,8 @@ class PrintCity extends PrinterJob {
     );
 
     receipt.addLeftRightText(
-      'អាសយដ្ឋាន', '',
+      'អាសយដ្ឋាន',
+      '',
       leftSize: ReceiptTextSizeType.small,
       rightSize: ReceiptTextSizeType.small,
     );
@@ -79,13 +83,15 @@ class PrintCity extends PrinterJob {
     );
 
     receipt.addLeftRightText(
-      'តម្លៃសរុប', '',
+      'តម្លៃសរុប',
+      '',
       leftSize: ReceiptTextSizeType.small,
       rightSize: ReceiptTextSizeType.small,
     );
     receipt.addSpacer();
     receipt.addLeftRightText(
-      '$amountRiel៛', '($amount)',
+      amount,
+      '($amountRiel៛)',
       leftStyle: ReceiptTextStyleType.bold,
       rightStyle: ReceiptTextStyleType.normal,
       leftSize: ReceiptTextSizeType.large,
@@ -93,7 +99,8 @@ class PrintCity extends PrinterJob {
     );
 
     receipt.addLeftRightText(
-      '', _dateTime,
+      '',
+      _dateTime,
       leftSize: ReceiptTextSizeType.small,
       rightSize: ReceiptTextSizeType.small,
     );
@@ -105,7 +112,10 @@ class PrintCity extends PrinterJob {
 
     if (printSucceeded) {
       await AddFireStore().city(
-        address, '$amountRiel៛ ($amount)', phoneNumber, _dateTime,
+        address,
+        '$amountRiel៛ ($amount)',
+        phoneNumber,
+        _dateTime,
       );
       onSuccess?.call();
     } else {

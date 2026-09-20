@@ -162,8 +162,7 @@ class _SettingState extends State<Setting> {
                               children: const <Widget>[
                                 Text(
                                   'Scan Bluetooth Device',
-                                  style: TextStyle(
-                                      fontSize: 24),
+                                  style: TextStyle(fontSize: 24),
                                 ),
                                 Text(
                                   'Press Button Scan',
@@ -178,7 +177,8 @@ class _SettingState extends State<Setting> {
               ElevatedButton(
                   style: ElevatedButton.styleFrom(
                       shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(18))),
+                          borderRadius: BorderRadius.circular(18)),
+                      backgroundColor: Colors.pink.shade200),
                   onPressed: _isLoading ? null : _onScanPressed,
                   child: const Text('SCAN')),
             ],
@@ -211,9 +211,9 @@ class _SettingState extends State<Setting> {
 
     try {
       final devices = await _bluePrintPos.scan().timeout(
-        const Duration(seconds: 6),
-        onTimeout: () => <BlueDevice>[],
-      );
+            const Duration(seconds: 6),
+            onTimeout: () => <BlueDevice>[],
+          );
       if (devices.isNotEmpty) {
         setState(() {
           _blueDevices = devices;
@@ -225,9 +225,11 @@ class _SettingState extends State<Setting> {
       }
     } catch (e) {
       setState(() => _isLoading = false);
-      showToast('ស្កេនបរាជ័យ: $e'); // TEMPORARY — shows the real error, remove the ": $e" once confirmed working
+      showToast(
+          'ស្កេនបរាជ័យ: $e'); // TEMPORARY — shows the real error, remove the ": $e" once confirmed working
     }
   }
+
   void _onSelectDevice(int index) {
     setState(() {
       _isLoading = true;
@@ -257,7 +259,7 @@ class _SettingState extends State<Setting> {
         rightSize: ReceiptTextSizeType.small);
     receiptText.addSpacer(useDashed: true);
 
-    showToast('Printing...',color: Colors.green);
+    showToast('Printing...', color: Colors.green);
     await _bluePrintPos.printReceiptText(receiptText);
     await _bluePrintPos.disconnect();
   }

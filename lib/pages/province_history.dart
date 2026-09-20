@@ -12,7 +12,7 @@ class ProvinceHistory extends StatelessWidget {
         appBarTitle: 'ប្រវត្តិផ្ញើ',
         accentColor: Colors.orange,
         filteredAccentColor: Colors.deepOrange,
-        topLeft: (data) => data['receiver']?.toString() ?? '',
+        topLeft: (data) => data['phone']?.toString() ?? '',
         topRight: (data) => data['destination']?.toString().trim() ?? '',
         topRightColor: Colors.orange,
         bottomLeft: (data) => data['deliver']?.toString() ?? '',

@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.mrpov.final_printer">
+    package="com.mrpov.printer_lite">
     <!-- Bluetooth: required for scanning/connecting to the thermal printer -->
     <uses-permission android:name="android.permission.BLUETOOTH" android:maxSdkVersion="30"/>
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" android:maxSdkVersion="30"/>
@@ -8,7 +8,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
 
     <application
-        android:label="PrinterX"
+        android:label="PrinterXL"
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon">
         <activity

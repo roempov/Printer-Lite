@@ -8,7 +8,7 @@ class CityHistory extends StatelessWidget {
   Widget build(BuildContext context) {
     return HistoryPage(
       config: HistoryConfig(
-        collectionName: 'products',
+        collectionName: 'cod',
         appBarTitle: 'ប្រវត្តិលក់',
         accentColor: Colors.blue,
         filteredAccentColor: Colors.indigo,

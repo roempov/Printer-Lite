@@ -14,7 +14,7 @@ class Province extends StatefulWidget {
 class _ProvinceState extends State<Province>
     with SingleTickerProviderStateMixin {
   // ── Controllers ──────────────────────────────────────────────────────────
-  final _fieldSender = TextEditingController()..text = '087 959 504';
+  final _fieldSender = TextEditingController()..text = '096 700 3269';
   final _fieldReceiver = TextEditingController();
   final _fieldDestination = TextEditingController();
   final _fieldNote = TextEditingController();
@@ -136,15 +136,13 @@ class _ProvinceState extends State<Province>
             ),
           ),
           actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).push(
-                MaterialPageRoute(builder: (_) => const ProvinceHistory()),
-              ),
-              child: const Text(
-                'ប្រវត្តិផ្ញើ',
-                style: TextStyle(color: Colors.white),
-              ),
-            ),
+            IconButton(
+                onPressed: () => Navigator.of(context).push(
+                      MaterialPageRoute(
+                          builder: (_) => const ProvinceHistory()),
+                    ),
+                color: Colors.orange,
+                icon: const Icon(Icons.history)),
             const SizedBox(width: 20),
           ],
         ),

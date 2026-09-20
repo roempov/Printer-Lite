@@ -103,7 +103,7 @@ class _CityState extends State<City> with SingleTickerProviderStateMixin {
     );
     setState(() {
       _formattedResult =
-          NumberFormat('#,###').format(number * _multiplier) + '៛';
+          '${NumberFormat('#,###').format(number * _multiplier)}៛';
     });
   }
 
@@ -183,16 +183,15 @@ class _CityState extends State<City> with SingleTickerProviderStateMixin {
             onPressed: _navigateToSettings,
           ),
           actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).push(
-                MaterialPageRoute(builder: (_) => const CityHistory()),
-              ),
-              child: const Text(
-                'ប្រវត្តិលក់',
-                style: TextStyle(color: Colors.white),
-              ),
-            ),
-            const SizedBox(width: 20),
+            IconButton(
+                onPressed: () => Navigator.of(context).push(
+                      MaterialPageRoute(builder: (_) => const CityHistory()),
+                    ),
+                color: Colors.pink.shade200,
+                icon: const Icon(Icons.history)),
+            const SizedBox(
+              width: 20,
+            )
           ],
         ),
 
