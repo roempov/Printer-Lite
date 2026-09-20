@@ -33,7 +33,7 @@ class PrintCity extends PrinterJob {
     final receipt = ReceiptSectionText();
 
     receipt.addLeftRightText(
-      'COD', 'Nana Online Shop',
+      'COD', 'Niza Shop',
       leftSize: ReceiptTextSizeType.medium,
       rightSize: ReceiptTextSizeType.small,
     );

@@ -1,5 +1,6 @@
-import 'package:final_printer/pages/exchage_rate_setting.dart';
+import 'package:final_printer/pages/exchange_rate.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../preference.dart';
@@ -26,6 +27,18 @@ class _CityState extends State<City> with SingleTickerProviderStateMixin {
   bool _validateFieldAddress = false;
   String _formattedResult = '';
   double _multiplier = 4000;
+
+  // Blocks anything that isn't: digits, at most one dot, at most 3 digits
+// after it. Runs before onChanged, so a second dot or a 4th decimal
+// digit is rejected outright — the keystroke never lands in the field.
+  final _decimalFormatter =
+      TextInputFormatter.withFunction((oldValue, newValue) {
+    final text = newValue.text
+        .replaceAll(',', ''); // strip thousands separators before checking
+    if (text.isEmpty) return newValue;
+    final isValid = RegExp(r'^\d*\.?\d{0,3}$').hasMatch(text);
+    return isValid ? newValue : oldValue;
+  });
 
   // ── Lifecycle ─────────────────────────────────────────────────────────────
   @override
@@ -58,25 +71,40 @@ class _CityState extends State<City> with SingleTickerProviderStateMixin {
     });
   }
 
+  // Field now takes a DOLLAR amount; _formattedResult now shows the RIEL result.
   void _formatAmount(String value) {
     if (value.isEmpty) {
       setState(() => _formattedResult = '');
       return;
     }
     final clean = value.replaceAll(',', '');
+
+    double number;
     try {
-      final number = double.parse(clean);
-      final formatted = NumberFormat('#,###').format(number);
-      _fieldAmount.value = TextEditingValue(
-        text: formatted,
-        selection: TextSelection.collapsed(offset: formatted.length),
-      );
-      setState(() {
-        _formattedResult = (number / _multiplier).toStringAsFixed(2) + '\$';
-      });
+      number = double.parse(clean);
     } catch (_) {
       setState(() => _formattedResult = 'តម្លៃមិនត្រឹមត្រូវ');
+      return;
     }
+
+    // Rebuild the display text ourselves instead of handing the whole thing to
+    // NumberFormat, which silently drops a trailing '.' or trailing zeros
+    // (e.g. typing "2." would get reformatted straight back to "2").
+    final parts = clean.split('.');
+    final formattedInteger = NumberFormat('#,###')
+        .format(int.parse(parts[0].isEmpty ? '0' : parts[0]));
+    final formatted = clean.contains('.')
+        ? '$formattedInteger.${parts.length > 1 ? parts[1] : ''}'
+        : formattedInteger;
+
+    _fieldAmount.value = TextEditingValue(
+      text: formatted,
+      selection: TextSelection.collapsed(offset: formatted.length),
+    );
+    setState(() {
+      _formattedResult =
+          NumberFormat('#,###').format(number * _multiplier) + '៛';
+    });
   }
 
   void _clearFields() {
@@ -132,8 +160,10 @@ class _CityState extends State<City> with SingleTickerProviderStateMixin {
     PrintCity(
       phoneNumber: _fieldPhone.text,
       address: _fieldAddress.text,
-      amount: _formattedResult,
-      amountRiel: _fieldAmount.text,
+      // amount stays the USD side, amountRiel stays the Riel side —
+      // just sourced from the swapped fields now.
+      amount: '${_fieldAmount.text}\$',
+      amountRiel: _formattedResult.replaceAll('៛', ''),
       onSuccess: _clearFields,
     ).preparePrint();
   }
@@ -176,7 +206,7 @@ class _CityState extends State<City> with SingleTickerProviderStateMixin {
               height: 75,
               child: FloatingActionButton(
                 heroTag: null,
-                backgroundColor: Colors.blue,
+                backgroundColor: Colors.pink.shade200,
                 onPressed: _onPrintPressed,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(16),
@@ -200,9 +230,9 @@ class _CityState extends State<City> with SingleTickerProviderStateMixin {
                   child: Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      'COD',
+                      '',
                       style: TextStyle(
-                        color: Colors.blue,
+                        color: Colors.black38,
                         fontWeight: FontWeight.bold,
                         fontSize: 20,
                       ),
@@ -258,20 +288,22 @@ class _CityState extends State<City> with SingleTickerProviderStateMixin {
                 ),
                 const SizedBox(height: 25),
 
-                // Amount field (Riel input)
+                // Amount field (now Dollar input)
                 SizedBox(
                   height: 70,
                   child: TextField(
                     controller: _fieldAmount,
                     onChanged: _formatAmount,
-                    keyboardType: TextInputType.number,
+                    inputFormatters: [_decimalFormatter],
+                    keyboardType:
+                        const TextInputType.numberWithOptions(decimal: true),
                     style: textFieldStyle(),
                     decoration: InputDecoration(
                       enabledBorder: buildOutLineBorder(),
                       focusedBorder: buildOutLineBorder(),
                       filled: true,
                       fillColor: Colors.white,
-                      labelText: 'តម្លៃសរុប ៛',
+                      labelText: 'តម្លៃសរុប \$',
                       labelStyle: labelStyle(),
                       suffixIcon: IconButton(
                         icon: const Icon(Icons.clear),
@@ -285,7 +317,7 @@ class _CityState extends State<City> with SingleTickerProviderStateMixin {
                 ),
                 const SizedBox(height: 20),
 
-                // USD result
+                // Riel result
                 Text(
                   '  $_formattedResult',
                   style: const TextStyle(fontSize: 24),

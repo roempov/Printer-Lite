@@ -2,7 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:final_printer/pages/city.dart';
 import 'package:final_printer/pages/province.dart';
-import 'package:final_printer/pages/setting.dart';
+import 'package:final_printer/pages/connect.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -51,7 +51,7 @@ class _HomePageState extends State<HomePage> {
           NavigationDestination(
               selectedIcon: Icon(Icons.delivery_dining),
               icon: Icon(Icons.delivery_dining_outlined),
-              label: 'Bike'),
+              label: 'Delivery'),
           NavigationDestination(
               selectedIcon: Icon(Icons.local_shipping),
               icon: Icon(Icons.local_shipping_outlined),
