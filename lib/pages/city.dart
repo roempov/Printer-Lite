@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../preference.dart';
 import '../print_city.dart';
+import '../ui_helper.dart';
 import 'city_history.dart';
 
 class City extends StatefulWidget {
@@ -134,6 +134,7 @@ class _CityState extends State<City> with SingleTickerProviderStateMixin {
     await _animController.forward();
     await _animController.reverse();
 
+    if (!mounted) return;
     FocusScope.of(context).unfocus();
 
     final phoneEmpty = _fieldPhone.text.isEmpty;
@@ -177,10 +178,13 @@ class _CityState extends State<City> with SingleTickerProviderStateMixin {
         backgroundColor: const Color(0xB3D8D8D8),
         appBar: AppBar(
           backgroundColor: Colors.black87,
-          title: IconButton(
-            icon: const Icon(Icons.currency_exchange),
-            iconSize: 17,
-            onPressed: _navigateToSettings,
+          title: SizedBox(
+            width: 40,
+            child: IconButton(
+              icon: const Icon(Icons.currency_exchange),
+              iconSize: 17,
+              onPressed: _navigateToSettings,
+            ),
           ),
           actions: [
             IconButton(
@@ -199,7 +203,7 @@ class _CityState extends State<City> with SingleTickerProviderStateMixin {
         floatingActionButton: ScaleTransition(
           scale: _scaleAnimation,
           child: Padding(
-            padding: const EdgeInsets.only(right: 5), // move left
+            padding: const EdgeInsets.only(right: 10), // move left
             child: SizedBox(
               width: 75,
               height: 75,

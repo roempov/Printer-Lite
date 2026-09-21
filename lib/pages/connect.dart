@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../bluetooth_permission.dart';
 import '../preference.dart';
+import '../ui_helper.dart';
 
 class Setting extends StatefulWidget {
   const Setting({Key? key}) : super(key: key);
@@ -176,9 +177,10 @@ class _SettingState extends State<Setting> {
               const SizedBox(height: 100),
               ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(18)),
-                      backgroundColor: Colors.pink.shade200),
+                    backgroundColor: Colors.blue.shade300,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(18)),
+                  ),
                   onPressed: _isLoading ? null : _onScanPressed,
                   child: const Text('SCAN')),
             ],

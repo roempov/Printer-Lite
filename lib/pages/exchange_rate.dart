@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../preference.dart';
+import '../ui_helper.dart';
 
 class ExchangeRate extends StatefulWidget {
+  const ExchangeRate({super.key});
+
   @override
   _ExchangeRateState createState() => _ExchangeRateState();
 }
@@ -11,7 +13,6 @@ class ExchangeRate extends StatefulWidget {
 class _ExchangeRateState extends State<ExchangeRate> {
   final _controller = TextEditingController();
   double _multiplier = 4000;
-  bool _saved = false;
 
   // Common presets
   final List<double> _presets = [4000, 4050, 4100, 4150, 4200];
@@ -43,7 +44,6 @@ class _ExchangeRateState extends State<ExchangeRate> {
     if (parsed != null) {
       setState(() {
         _multiplier = parsed;
-        _saved = false;
       });
     }
   }
@@ -51,7 +51,6 @@ class _ExchangeRateState extends State<ExchangeRate> {
   void _selectPreset(double value) {
     setState(() {
       _multiplier = value;
-      _saved = false;
       _controller.text = value.toStringAsFixed(0);
       _controller.selection = TextSelection.collapsed(
           offset: _controller.text.length);
@@ -65,7 +64,6 @@ class _ExchangeRateState extends State<ExchangeRate> {
     }
     final prefs = await SharedPreferences.getInstance();
     await prefs.setDouble('multiplier', _multiplier);
-    setState(() => _saved = true);
     Navigator.pop(context, _multiplier);
   }
 
@@ -224,7 +222,6 @@ class _ExchangeRateState extends State<ExchangeRate> {
                         _controller.clear();
                         setState(() {
                           _multiplier = 0;
-                          _saved = false;
                         });
                       },
                     ),

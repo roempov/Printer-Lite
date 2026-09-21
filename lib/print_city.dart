@@ -3,8 +3,10 @@ import 'package:blue_print_pos/receipt/receipt_section_text.dart';
 import 'package:blue_print_pos/receipt/receipt_text_size_type.dart';
 import 'package:blue_print_pos/receipt/receipt_text_style_type.dart';
 import 'package:final_printer/printer_job.dart';
+import 'package:final_printer/ui_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'firestore_service.dart';
 import 'preference.dart';
 
 class PrintCity extends PrinterJob {

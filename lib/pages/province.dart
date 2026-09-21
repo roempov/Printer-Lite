@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../preference.dart';
 import '../print_province.dart';
+import '../ui_helper.dart';
 import 'province_history.dart';
 
 class Province extends StatefulWidget {
@@ -30,7 +30,7 @@ class _ProvinceState extends State<Province>
   static const String _keySelectedDelivery =
       'pinnedDelivery'; // key kept as-is so existing saved prefs still load
 
-  final List<String> _deliveryItems = ['វីរៈ ប៊ុនថាំ', 'J&T'];
+  final List<String> _deliveryItems = ['វីរៈ ប៊ុនថាំ', 'J&T', 'កាពីតូល'];
 
   // ── Lifecycle ─────────────────────────────────────────────────────────────
   @override
@@ -76,8 +76,6 @@ class _ProvinceState extends State<Province>
       _fieldNote.clear();
       _validateFieldReceiver = false;
       _validateFieldDestination = false;
-      // _dropdownDeliverValue intentionally left as-is — it's the
-      // remembered choice now, not reset per-order.
       _senderReadOnly = true;
     });
   }
@@ -86,6 +84,7 @@ class _ProvinceState extends State<Province>
     await _animController.forward();
     await _animController.reverse();
 
+    if (!mounted) return;
     FocusScope.of(context).unfocus();
 
     final receiverEmpty = _fieldReceiver.text.isEmpty;
@@ -128,13 +127,7 @@ class _ProvinceState extends State<Province>
         backgroundColor: const Color(0xB3D8D8D8),
         appBar: AppBar(
           backgroundColor: Colors.black87,
-          title: const SizedBox(
-            width: 45,
-            child: Icon(
-              Icons.local_shipping_outlined,
-              size: 20,
-            ),
-          ),
+          title: const SizedBox(width: 40, child: Text('  .')),
           actions: [
             IconButton(
                 onPressed: () => Navigator.of(context).push(
@@ -149,7 +142,7 @@ class _ProvinceState extends State<Province>
         floatingActionButton: ScaleTransition(
           scale: _scaleAnimation,
           child: Padding(
-            padding: const EdgeInsets.only(right: 5),
+            padding: const EdgeInsets.only(right: 10),
             child: SizedBox(
               width: 75,
               height: 75,
@@ -271,18 +264,30 @@ class _ProvinceState extends State<Province>
                 Row(
                   children: _deliveryItems.map((item) {
                     final isSelected = item == _deliverValue;
-                    final Color selectedTextColor =
-                        item == 'J&T' ? Colors.red : Colors.orange;
+                    final Color selectedTextColor = item == 'J&T'
+                        ? Colors.red
+                        : item == 'កាពីតូល'
+                            ? Colors.blue.shade700
+                            : Colors.orange;
                     return Expanded(
                       child: Padding(
-                        padding: const EdgeInsets.only(right: 6),
+                        padding: const EdgeInsets.all(3),
                         child: GestureDetector(
                           onDoubleTap: () => _selectDelivery(item),
                           child: Container(
-                            padding: const EdgeInsets.symmetric(vertical: 12),
+                            padding: const EdgeInsets.symmetric(vertical: 8),
                             decoration: BoxDecoration(
                               color: isSelected ? Colors.white : Colors.white,
                               borderRadius: BorderRadius.circular(10),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: isSelected
+                                      ? selectedTextColor
+                                      : Colors.grey.withOpacity(0.1),
+                                  blurRadius: 4,
+                                  spreadRadius: 0.1,
+                                ),
+                              ],
                               border: Border.all(
                                 color: isSelected
                                     ? selectedTextColor

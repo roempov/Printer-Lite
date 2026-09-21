@@ -2,6 +2,7 @@ import 'package:blue_print_pos/blue_print_pos.dart';
 import 'package:blue_print_pos/models/blue_device.dart';
 import 'package:blue_print_pos/models/connection_status.dart';
 import 'package:blue_print_pos/receipt/receipt_section_text.dart';
+import 'package:final_printer/ui_helper.dart';
 import 'bluetooth_permission.dart';
 import 'preference.dart';
 
