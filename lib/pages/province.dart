@@ -11,8 +11,7 @@ class Province extends StatefulWidget {
   State<StatefulWidget> createState() => _ProvinceState();
 }
 
-class _ProvinceState extends State<Province>
-    with SingleTickerProviderStateMixin {
+class _ProvinceState extends State<Province> with SingleTickerProviderStateMixin {
   // ── Controllers ──────────────────────────────────────────────────────────
   final _fieldSender = TextEditingController()..text = '096 700 3269';
   final _fieldReceiver = TextEditingController();
@@ -27,8 +26,7 @@ class _ProvinceState extends State<Province>
   bool _senderReadOnly = true;
   String _deliverValue = 'វីរៈ ប៊ុនថាំ';
 
-  static const String _keySelectedDelivery =
-      'pinnedDelivery'; // key kept as-is so existing saved prefs still load
+  static const String _keySelectedDelivery = 'pinnedDelivery'; // key kept as-is so existing saved prefs still load
 
   final List<String> _deliveryItems = ['វីរៈ ប៊ុនថាំ', 'J&T', 'កាពីតូល'];
 
@@ -127,16 +125,20 @@ class _ProvinceState extends State<Province>
         backgroundColor: const Color(0xB3D8D8D8),
         appBar: AppBar(
           backgroundColor: Colors.black87,
-          title: const SizedBox(width: 40, child: Text('  .')),
+          title: const SizedBox(
+              width: 40,
+              child: Text(
+                '  -',
+                style: TextStyle(color: Colors.orange),
+              )),
           actions: [
             IconButton(
                 onPressed: () => Navigator.of(context).push(
-                      MaterialPageRoute(
-                          builder: (_) => const ProvinceHistory()),
+                      MaterialPageRoute(builder: (_) => const ProvinceHistory()),
                     ),
                 color: Colors.orange,
                 icon: const Icon(Icons.history)),
-            const SizedBox(width: 20),
+            const SizedBox(width: 15),
           ],
         ),
         floatingActionButton: ScaleTransition(
@@ -198,8 +200,7 @@ class _ProvinceState extends State<Province>
                       labelStyle: labelStyle(),
                       suffixIcon: IconButton(
                         icon: const Icon(Icons.edit),
-                        onPressed: () =>
-                            setState(() => _senderReadOnly = false),
+                        onPressed: () => setState(() => _senderReadOnly = false),
                       ),
                     ),
                   ),
@@ -268,30 +269,27 @@ class _ProvinceState extends State<Province>
                         ? Colors.red
                         : item == 'កាពីតូល'
                             ? Colors.blue.shade700
-                            : Colors.orange;
+                            : Colors.orange.shade600;
                     return Expanded(
                       child: Padding(
                         padding: const EdgeInsets.all(3),
                         child: GestureDetector(
                           onDoubleTap: () => _selectDelivery(item),
                           child: Container(
-                            padding: const EdgeInsets.symmetric(vertical: 8),
+                            padding: const EdgeInsets.symmetric(vertical: 10
+                            ),
                             decoration: BoxDecoration(
                               color: isSelected ? Colors.white : Colors.white,
-                              borderRadius: BorderRadius.circular(10),
+                              borderRadius: BorderRadius.circular(20),
                               boxShadow: [
                                 BoxShadow(
-                                  color: isSelected
-                                      ? selectedTextColor
-                                      : Colors.grey.withOpacity(0.1),
-                                  blurRadius: 4,
+                                  color: isSelected ? selectedTextColor : Colors.grey.withOpacity(0.1),
+                                  blurRadius: 2,
                                   spreadRadius: 0.1,
                                 ),
                               ],
                               border: Border.all(
-                                color: isSelected
-                                    ? selectedTextColor
-                                    : Colors.grey.shade300,
+                                color: isSelected ? selectedTextColor : Colors.grey.shade300,
                               ),
                             ),
                             child: Text(
@@ -300,9 +298,7 @@ class _ProvinceState extends State<Province>
                               style: TextStyle(
                                 fontSize: 15,
                                 fontWeight: FontWeight.w600,
-                                color: isSelected
-                                    ? selectedTextColor
-                                    : Colors.black87,
+                                color: isSelected ? selectedTextColor : Colors.black87,
                               ),
                             ),
                           ),

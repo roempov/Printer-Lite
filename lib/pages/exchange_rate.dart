@@ -7,8 +7,7 @@ class ExchangeRate extends StatefulWidget {
   const ExchangeRate({super.key});
 
   @override
-  _ExchangeRateState createState() => _ExchangeRateState();
-}
+  State<ExchangeRate> createState() => _ExchangeRateState();}
 
 class _ExchangeRateState extends State<ExchangeRate> {
   final _controller = TextEditingController();
@@ -64,6 +63,7 @@ class _ExchangeRateState extends State<ExchangeRate> {
     }
     final prefs = await SharedPreferences.getInstance();
     await prefs.setDouble('multiplier', _multiplier);
+    if (!mounted) return;
     Navigator.pop(context, _multiplier);
   }
 

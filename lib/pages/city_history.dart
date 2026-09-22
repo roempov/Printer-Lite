@@ -16,7 +16,7 @@ class CityHistory extends StatelessWidget {
         topRight: (data) => data['address']?.toString().trim() ?? '',
         topRightColor: Colors.blue,
         bottomLeft: (data) => data['price']?.toString() ?? '',
-        bottomLeftColor: (_) => Colors.red[300]!,
+        bottomLeftColor: (_) => Colors.green!,
         bottomRight: (data) => data['date']?.toString() ?? '',
       ),
     );

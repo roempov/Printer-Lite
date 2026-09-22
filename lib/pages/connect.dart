@@ -42,8 +42,7 @@ class _SettingState extends State<Setting> {
                 child: _isLoading && _blueDevices.isEmpty
                     ? const Center(
                         child: CircularProgressIndicator(
-                          valueColor:
-                              AlwaysStoppedAnimation<Color>(Colors.blue),
+                          valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
                         ),
                       )
                     : _blueDevices.isNotEmpty
@@ -52,53 +51,33 @@ class _SettingState extends State<Setting> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
                                 Column(
-                                  children: List<Widget>.generate(
-                                      _blueDevices.length, (int index) {
+                                  children: List<Widget>.generate(_blueDevices.length, (int index) {
                                     return Row(
                                       children: <Widget>[
                                         Expanded(
                                           child: GestureDetector(
-                                            onTap: _blueDevices[index]
-                                                        .address ==
-                                                    (_selectedDevice?.address ??
-                                                        '')
+                                            onTap: _blueDevices[index].address == (_selectedDevice?.address ?? '')
                                                 ? _onDisconnectDevice
                                                 : () => _onSelectDevice(index),
                                             child: Padding(
-                                              padding:
-                                                  const EdgeInsets.all(8.0),
+                                              padding: const EdgeInsets.all(8.0),
                                               child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
+                                                crossAxisAlignment: CrossAxisAlignment.start,
                                                 children: <Widget>[
                                                   Text(
                                                     _blueDevices[index].name,
                                                     style: TextStyle(
-                                                      color: _selectedDevice
-                                                                  ?.address ==
-                                                              _blueDevices[
-                                                                      index]
-                                                                  .address
-                                                          ? Colors.blue
-                                                          : Colors.black,
+                                                      color: _selectedDevice?.address == _blueDevices[index].address ? Colors.blue : Colors.black,
                                                       fontSize: 20,
-                                                      fontWeight:
-                                                          FontWeight.w500,
+                                                      fontWeight: FontWeight.w500,
                                                     ),
                                                   ),
                                                   Text(
                                                     _blueDevices[index].address,
                                                     style: TextStyle(
-                                                      color: _selectedDevice
-                                                                  ?.address ==
-                                                              _blueDevices[
-                                                                      index]
-                                                                  .address
-                                                          ? Colors.blueGrey
-                                                          : Colors.grey,
+                                                      color: _selectedDevice?.address == _blueDevices[index].address ? Colors.blueGrey : Colors.grey,
                                                       fontSize: 14,
-                                                      fontWeight:
-                                                          FontWeight.w500,
+                                                      fontWeight: FontWeight.w500,
                                                     ),
                                                   ),
                                                 ],
@@ -106,48 +85,33 @@ class _SettingState extends State<Setting> {
                                             ),
                                           ),
                                         ),
-                                        if (_loadingAtIndex == index &&
-                                            _isLoading)
+                                        if (_loadingAtIndex == index && _isLoading)
                                           Container(
                                             height: 24.0,
                                             width: 24.0,
-                                            margin: const EdgeInsets.only(
-                                                right: 8.0),
-                                            child:
-                                                const CircularProgressIndicator(
-                                              valueColor:
-                                                  AlwaysStoppedAnimation<Color>(
+                                            margin: const EdgeInsets.only(right: 8.0),
+                                            child: const CircularProgressIndicator(
+                                              valueColor: AlwaysStoppedAnimation<Color>(
                                                 Colors.blue,
                                               ),
                                             ),
                                           ),
-                                        if (!_isLoading &&
-                                            _blueDevices[index].address ==
-                                                (_selectedDevice?.address ??
-                                                    ''))
+                                        if (!_isLoading && _blueDevices[index].address == (_selectedDevice?.address ?? ''))
                                           TextButton(
                                             onPressed: _startPrint,
                                             style: ButtonStyle(
-                                              backgroundColor:
-                                                  MaterialStateProperty
-                                                      .resolveWith<Color>(
+                                              backgroundColor: MaterialStateProperty.resolveWith<Color>(
                                                 (Set<MaterialState> states) {
-                                                  if (states.contains(
-                                                      MaterialState.pressed)) {
-                                                    return Theme.of(context)
-                                                        .colorScheme
-                                                        .primary
-                                                        .withOpacity(0.5);
+                                                  if (states.contains(MaterialState.pressed)) {
+                                                    return Theme.of(context).colorScheme.primary.withOpacity(0.5);
                                                   }
-                                                  return Theme.of(context)
-                                                      .primaryColor;
+                                                  return Theme.of(context).primaryColor;
                                                 },
                                               ),
                                             ),
                                             child: const Text(
                                               'Test Print',
-                                              style: TextStyle(
-                                                  color: Colors.white),
+                                              style: TextStyle(color: Colors.white),
                                             ),
                                           ),
                                       ],
@@ -162,13 +126,12 @@ class _SettingState extends State<Setting> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: const <Widget>[
                                 Text(
-                                  'Scan Bluetooth Device',
+                                  'Bluetooth Device',
                                   style: TextStyle(fontSize: 24),
                                 ),
                                 Text(
                                   'Press Button Scan',
-                                  style: TextStyle(
-                                      fontSize: 14, color: Colors.grey),
+                                  style: TextStyle(fontSize: 14, color: Colors.grey),
                                 ),
                               ],
                             ),
@@ -178,8 +141,7 @@ class _SettingState extends State<Setting> {
               ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.blue.shade300,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(18)),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
                   ),
                   onPressed: _isLoading ? null : _onScanPressed,
                   child: const Text('SCAN')),
@@ -227,8 +189,7 @@ class _SettingState extends State<Setting> {
       }
     } catch (e) {
       setState(() => _isLoading = false);
-      showToast(
-          'ស្កេនបរាជ័យ: $e'); // TEMPORARY — shows the real error, remove the ": $e" once confirmed working
+      showToast('ស្កេនបរាជ័យ: $e'); // TEMPORARY — shows the real error, remove the ": $e" once confirmed working
     }
   }
 
@@ -256,9 +217,7 @@ class _SettingState extends State<Setting> {
   Future<void> _startPrint() async {
     final String formatDate = DateFormat.yMd().add_jm().format(DateTime.now());
     final ReceiptSectionText receiptText = ReceiptSectionText();
-    receiptText.addLeftRightText(formatDate, 'OK',
-        leftSize: ReceiptTextSizeType.small,
-        rightSize: ReceiptTextSizeType.small);
+    receiptText.addLeftRightText(formatDate, 'OK', leftSize: ReceiptTextSizeType.small, rightSize: ReceiptTextSizeType.small);
     receiptText.addSpacer(useDashed: true);
 
     showToast('Printing...', color: Colors.green);

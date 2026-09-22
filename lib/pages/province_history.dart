@@ -16,8 +16,11 @@ class ProvinceHistory extends StatelessWidget {
         topRight: (data) => data['destination']?.toString().trim() ?? '',
         topRightColor: Colors.orange,
         bottomLeft: (data) => data['deliver']?.toString() ?? '',
-        bottomLeftColor: (data) =>
-        data['deliver'] == 'J&T' ? Colors.red : Colors.black45,
+        bottomLeftColor: (data) => data['deliver'] == 'J&T'
+            ? Colors.red
+            : data['deliver'] == 'កាពីតូល'
+                ? Colors.blue.shade700
+                : Colors.black45,
         bottomRight: (data) => data['date']?.toString() ?? '',
       ),
     );

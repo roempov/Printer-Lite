@@ -26,8 +26,7 @@ class PrintProvince extends PrinterJob {
     this.onSuccess,
   });
 
-  final String _dateTime =
-      DateFormat('dd/MM/yyyy hh:mm a').format(DateTime.now());
+  final String _dateTime = DateFormat('dd/MM/yyyy hh:mm a').format(DateTime.now());
 
   @override
   String get disconnectMessage => 'Restart ម៉ាស៊ីន ព្រីន';
@@ -36,8 +35,9 @@ class PrintProvince extends PrinterJob {
   Future<void> printAndSave() async {
     final receipt = ReceiptSectionText();
 
+    receipt.addSpacer(useDashed: true);
     receipt.addText(
-      '---- Niza Shop ----',
+      'Niza Shop',
       alignment: ReceiptAlignment.center,
       size: ReceiptTextSizeType.extraLarge,
       style: ReceiptTextStyleType.bold,
@@ -92,7 +92,7 @@ class PrintProvince extends PrinterJob {
       leftSize: ReceiptTextSizeType.small,
       rightSize: ReceiptTextSizeType.small,
     );
-    receipt.addSpacer(count: 2);
+    receipt.addSpacer(count: 3);
 
     showToast('Printing...', color: Colors.green);
 

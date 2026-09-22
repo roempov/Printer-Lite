@@ -31,10 +31,8 @@ class _CityState extends State<City> with SingleTickerProviderStateMixin {
   // Blocks anything that isn't: digits, at most one dot, at most 3 digits
 // after it. Runs before onChanged, so a second dot or a 4th decimal
 // digit is rejected outright — the keystroke never lands in the field.
-  final _decimalFormatter =
-      TextInputFormatter.withFunction((oldValue, newValue) {
-    final text = newValue.text
-        .replaceAll(',', ''); // strip thousands separators before checking
+  final _decimalFormatter = TextInputFormatter.withFunction((oldValue, newValue) {
+    final text = newValue.text.replaceAll(',', ''); // strip thousands separators before checking
     if (text.isEmpty) return newValue;
     final isValid = RegExp(r'^\d*\.?\d{0,3}$').hasMatch(text);
     return isValid ? newValue : oldValue;
@@ -91,19 +89,15 @@ class _CityState extends State<City> with SingleTickerProviderStateMixin {
     // NumberFormat, which silently drops a trailing '.' or trailing zeros
     // (e.g. typing "2." would get reformatted straight back to "2").
     final parts = clean.split('.');
-    final formattedInteger = NumberFormat('#,###')
-        .format(int.parse(parts[0].isEmpty ? '0' : parts[0]));
-    final formatted = clean.contains('.')
-        ? '$formattedInteger.${parts.length > 1 ? parts[1] : ''}'
-        : formattedInteger;
+    final formattedInteger = NumberFormat('#,###').format(int.parse(parts[0].isEmpty ? '0' : parts[0]));
+    final formatted = clean.contains('.') ? '$formattedInteger.${parts.length > 1 ? parts[1] : ''}' : formattedInteger;
 
     _fieldAmount.value = TextEditingValue(
       text: formatted,
       selection: TextSelection.collapsed(offset: formatted.length),
     );
     setState(() {
-      _formattedResult =
-          '${NumberFormat('#,###').format(number * _multiplier)}៛';
+      _formattedResult = '${NumberFormat('#,###').format(number * _multiplier)}៛';
     });
   }
 
@@ -182,7 +176,8 @@ class _CityState extends State<City> with SingleTickerProviderStateMixin {
             width: 40,
             child: IconButton(
               icon: const Icon(Icons.currency_exchange),
-              iconSize: 17,
+              color: Colors.pink.shade200,
+              iconSize: 18,
               onPressed: _navigateToSettings,
             ),
           ),
@@ -194,7 +189,7 @@ class _CityState extends State<City> with SingleTickerProviderStateMixin {
                 color: Colors.pink.shade200,
                 icon: const Icon(Icons.history)),
             const SizedBox(
-              width: 20,
+              width: 15,
             )
           ],
         ),
@@ -298,8 +293,7 @@ class _CityState extends State<City> with SingleTickerProviderStateMixin {
                     controller: _fieldAmount,
                     onChanged: _formatAmount,
                     inputFormatters: [_decimalFormatter],
-                    keyboardType:
-                        const TextInputType.numberWithOptions(decimal: true),
+                    keyboardType: const TextInputType.numberWithOptions(decimal: true),
                     style: textFieldStyle(),
                     decoration: InputDecoration(
                       enabledBorder: buildOutLineBorder(),

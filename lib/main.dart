@@ -15,8 +15,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-        debugShowCheckedModeBanner: false, home: HomePage());
+    return const MaterialApp(debugShowCheckedModeBanner: false, home: HomePage());
   }
 }
 
@@ -48,18 +47,9 @@ class _HomePageState extends State<HomePage> {
           });
         },
         destinations: const [
-          NavigationDestination(
-              selectedIcon: Icon(Icons.delivery_dining),
-              icon: Icon(Icons.delivery_dining_outlined),
-              label: 'Delivery'),
-          NavigationDestination(
-              selectedIcon: Icon(Icons.local_shipping),
-              icon: Icon(Icons.local_shipping_outlined),
-              label: 'Shipping'),
-          NavigationDestination(
-              selectedIcon: Icon(Icons.bluetooth_audio),
-              icon: Icon(Icons.bluetooth_outlined),
-              label: 'Connect')
+          NavigationDestination(selectedIcon: Icon(Icons.delivery_dining), icon: Icon(Icons.delivery_dining_outlined), label: 'Delivery'),
+          NavigationDestination(selectedIcon: Icon(Icons.local_shipping), icon: Icon(Icons.local_shipping_outlined), label: 'Shipping'),
+          NavigationDestination(selectedIcon: Icon(Icons.bluetooth_audio), icon: Icon(Icons.bluetooth_outlined), label: 'Connect')
         ],
       ),
     );

@@ -29,9 +29,9 @@ abstract class PrinterJob {
     List<BlueDevice> devices;
     try {
       devices = await bluePrintPos.scan().timeout(
-        const Duration(seconds: 6),
-        onTimeout: () => <BlueDevice>[],
-      );
+            const Duration(seconds: 6),
+            onTimeout: () => <BlueDevice>[],
+          );
     } catch (e) {
       showToast('ស្កេនបរាជ័យ: $e');
       return;

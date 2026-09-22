@@ -24,8 +24,7 @@ class PrintCity extends PrinterJob {
     this.onSuccess,
   });
 
-  final String _dateTime =
-      DateFormat('dd/MM/yyyy hh:mm a').format(DateTime.now());
+  final String _dateTime = DateFormat('dd/MM/yyyy hh:mm a').format(DateTime.now());
 
   @override
   String get disconnectMessage => 'បិទ បើកម៉ាស៊ីន ព្រីន';
@@ -106,7 +105,7 @@ class PrintCity extends PrinterJob {
       leftSize: ReceiptTextSizeType.small,
       rightSize: ReceiptTextSizeType.small,
     );
-    receipt.addSpacer(count: 2);
+    receipt.addSpacer(count: 3);
 
     showToast('Printing...', color: Colors.green);
 

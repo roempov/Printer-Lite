@@ -21,8 +21,7 @@ class HistoryConfig {
   final String emptyLabel;
 
   // was: final String emptyForDayLabel(...) => ...;
-  String emptyForDayLabel(String formattedDay) =>
-      'គ្មានទិន្នន័យសម្រាប់ $formattedDay';
+  String emptyForDayLabel(String formattedDay) => 'គ្មានទិន្នន័យសម្រាប់ $formattedDay';
 
   HistoryConfig({
     required this.collectionName,
@@ -41,8 +40,7 @@ class HistoryConfig {
 
 /// Reads a Firestore field defensively — never lets a missing/null field
 /// throw at render time (this was a real bug in the old duplicated screens).
-String _field(Map<String, dynamic> data, String key) =>
-    data[key]?.toString().trim() ?? '';
+String _field(Map<String, dynamic> data, String key) => data[key]?.toString().trim() ?? '';
 
 class HistoryPage extends StatefulWidget {
   final HistoryConfig config;
@@ -53,8 +51,7 @@ class HistoryPage extends StatefulWidget {
 }
 
 class _HistoryPageState extends State<HistoryPage> {
-  late final CollectionReference _collection =
-      FirebaseFirestore.instance.collection(widget.config.collectionName);
+  late final CollectionReference _collection = FirebaseFirestore.instance.collection(widget.config.collectionName);
 
   static const int _pageSize = 100;
   int _limit = _pageSize;
@@ -75,26 +72,19 @@ class _HistoryPageState extends State<HistoryPage> {
   void _initTodayStream() {
     _collection.orderBy('sort', descending: true).limit(1).get().then((snap) {
       if (snap.docs.isEmpty) return;
-      final latestOrder =
-          _field(snap.docs.first.data() as Map<String, dynamic>, 'sort');
+      final latestOrder = _field(snap.docs.first.data() as Map<String, dynamic>, 'sort');
       if (latestOrder.length < 8) return;
       final day = latestOrder.substring(0, 8);
       if (mounted) {
         setState(() {
-          _todayStream = _collection
-              .orderBy('sort')
-              .startAt(['$day 000000'])
-              .endAt(['$day 999999'])
-              .snapshots()
-              .map((s) => s.docs.length);
+          _todayStream = _collection.orderBy('sort').startAt(['$day 000000']).endAt(['$day 999999']).snapshots().map((s) => s.docs.length);
         });
       }
     });
   }
 
   Future<void> _preloadDays() async {
-    final snap =
-        await _collection.orderBy('sort', descending: true).limit(600).get();
+    final snap = await _collection.orderBy('sort', descending: true).limit(600).get();
     _cachedDays = _extractDays(snap);
     if (mounted) setState(() => _daysLoaded = true);
   }
@@ -109,23 +99,14 @@ class _HistoryPageState extends State<HistoryPage> {
   }
 
   Stream<int> _filteredCountStream(String day) {
-    return _collection
-        .orderBy('sort')
-        .startAt(['$day 000000'])
-        .endAt(['$day 999999'])
-        .snapshots()
-        .map((s) => s.docs.length);
+    return _collection.orderBy('sort').startAt(['$day 000000']).endAt(['$day 999999']).snapshots().map((s) => s.docs.length);
   }
 
   Stream<QuerySnapshot> _listStream() {
     if (_filterDay != null) {
-      return _collection.orderBy('sort', descending: true).startAt(
-          ['$_filterDay 999999']).endAt(['$_filterDay 000000']).snapshots();
+      return _collection.orderBy('sort', descending: true).startAt(['$_filterDay 999999']).endAt(['$_filterDay 000000']).snapshots();
     }
-    return _collection
-        .orderBy('sort', descending: true)
-        .limit(_limit)
-        .snapshots();
+    return _collection.orderBy('sort', descending: true).limit(_limit).snapshots();
   }
 
   String _formatDay(String day) {
@@ -137,8 +118,7 @@ class _HistoryPageState extends State<HistoryPage> {
     final navigator = Navigator.of(context);
 
     if (!_daysLoaded) {
-      final snap =
-          await _collection.orderBy('sort', descending: true).limit(300).get();
+      final snap = await _collection.orderBy('sort', descending: true).limit(300).get();
       _cachedDays = _extractDays(snap);
       _daysLoaded = true;
     }
@@ -156,10 +136,7 @@ class _HistoryPageState extends State<HistoryPage> {
               ListTile(
                 dense: true,
                 title: const Text('ទាំងអស់', style: TextStyle(fontSize: 13)),
-                trailing: _filterDay == null
-                    ? Icon(Icons.check,
-                        color: widget.config.accentColor, size: 18)
-                    : null,
+                trailing: _filterDay == null ? Icon(Icons.check, color: widget.config.accentColor, size: 18) : null,
                 onTap: () {
                   setState(() {
                     _filterDay = null;
@@ -171,12 +148,8 @@ class _HistoryPageState extends State<HistoryPage> {
               ..._cachedDays.take(8).map((day) {
                 return ListTile(
                   dense: true,
-                  title: Text(_formatDay(day),
-                      style: const TextStyle(fontSize: 13)),
-                  trailing: _filterDay == day
-                      ? Icon(Icons.check,
-                          color: widget.config.accentColor, size: 18)
-                      : null,
+                  title: Text(_formatDay(day), style: const TextStyle(fontSize: 13)),
+                  trailing: _filterDay == day ? Icon(Icons.check, color: widget.config.accentColor, size: 18) : null,
                   onTap: () {
                     setState(() {
                       _filterDay = day;
@@ -236,9 +209,7 @@ class _HistoryPageState extends State<HistoryPage> {
   @override
   Widget build(BuildContext context) {
     final config = widget.config;
-    final countStream = _filterDay != null
-        ? _filteredCountStream(_filterDay!)
-        : (_todayStream ?? const Stream.empty());
+    final countStream = _filterDay != null ? _filteredCountStream(_filterDay!) : (_todayStream ?? const Stream.empty());
 
     return Scaffold(
       appBar: AppBar(
@@ -249,8 +220,7 @@ class _HistoryPageState extends State<HistoryPage> {
             Center(
               child: Text(
                 _formatDay(_filterDay!),
-                style:
-                    const TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
+                style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
               ),
             ),
           IconButton(
@@ -260,17 +230,14 @@ class _HistoryPageState extends State<HistoryPage> {
           StreamBuilder<int>(
             stream: countStream,
             builder: (context, snapshot) {
-              if (!snapshot.hasData &&
-                  _filterDay == null &&
-                  _todayStream == null) {
+              if (!snapshot.hasData && _filterDay == null && _todayStream == null) {
                 return const Padding(
                   padding: EdgeInsets.only(right: 14),
                   child: Center(
                     child: SizedBox(
                       width: 16,
                       height: 16,
-                      child: CircularProgressIndicator(
-                          strokeWidth: 2, color: Colors.white),
+                      child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
                     ),
                   ),
                 );
@@ -280,20 +247,14 @@ class _HistoryPageState extends State<HistoryPage> {
                 padding: const EdgeInsets.only(right: 14),
                 child: Center(
                   child: Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                     decoration: BoxDecoration(
-                      color: _filterDay == null
-                          ? config.accentColor
-                          : config.filteredAccentColor,
+                      color: _filterDay == null ? config.accentColor : config.filteredAccentColor,
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Text(
                       '$count',
-                      style: const TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 14),
+                      style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 14),
                     ),
                   ),
                 ),
@@ -315,9 +276,7 @@ class _HistoryPageState extends State<HistoryPage> {
           if (docs.isEmpty) {
             return Center(
               child: Text(
-                _filterDay != null
-                    ? config.emptyForDayLabel(_formatDay(_filterDay!))
-                    : config.emptyLabel,
+                _filterDay != null ? config.emptyForDayLabel(_formatDay(_filterDay!)) : config.emptyLabel,
                 style: const TextStyle(fontSize: 14, color: Colors.black45),
               ),
             );
@@ -333,8 +292,7 @@ class _HistoryPageState extends State<HistoryPage> {
                     child: Center(
                       child: Text(
                         '— បានបង្ហាញទាំងអស់ (${docs.length}) —',
-                        style: const TextStyle(
-                            fontSize: 11, color: Colors.black45),
+                        style: const TextStyle(fontSize: 11, color: Colors.black45),
                       ),
                     ),
                   );
@@ -344,8 +302,7 @@ class _HistoryPageState extends State<HistoryPage> {
                   child: OutlinedButton.icon(
                     onPressed: () => setState(() => _limit += _pageSize),
                     icon: const Icon(Icons.expand_more, size: 18),
-                    label: const Text('បង្ហាញបន្ថែម 100',
-                        style: TextStyle(fontSize: 13)),
+                    label: const Text('បង្ហាញបន្ថែម 100', style: TextStyle(fontSize: 13)),
                     style: OutlinedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(vertical: 10),
                       minimumSize: const Size(double.infinity, 40),
@@ -357,23 +314,20 @@ class _HistoryPageState extends State<HistoryPage> {
               final doc = docs[index];
               final data = doc.data() as Map<String, dynamic>;
               final seqNumber = index + 1;
-              final bottomLeftColor =
-                  config.bottomLeftColor?.call(data) ?? Colors.black45;
+              final bottomLeftColor = config.bottomLeftColor?.call(data) ?? Colors.black45;
 
               return Card(
                 elevation: 1.5,
                 margin: const EdgeInsets.only(left: 8, right: 8, top: 2),
                 child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   child: Row(
                     children: [
                       SizedBox(
                         width: 24,
                         child: Text(
                           '$seqNumber',
-                          style: const TextStyle(
-                              fontSize: 11, color: Colors.black38),
+                          style: const TextStyle(fontSize: 11, color: Colors.black38),
                           textAlign: TextAlign.center,
                         ),
                       ),
@@ -389,17 +343,13 @@ class _HistoryPageState extends State<HistoryPage> {
                                   width: 100,
                                   child: Text(
                                     config.topLeft(data),
-                                    style: const TextStyle(
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w500),
+                                    style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
                                   ),
                                 ),
                                 Expanded(
                                   child: Text(
                                     config.topRight(data),
-                                    style: TextStyle(
-                                        fontSize: 14,
-                                        color: config.topRightColor),
+                                    style: TextStyle(fontSize: 14, color: config.topRightColor),
                                     maxLines: 2,
                                     overflow: TextOverflow.ellipsis,
                                     softWrap: true,
@@ -414,15 +364,13 @@ class _HistoryPageState extends State<HistoryPage> {
                                   width: 100,
                                   child: Text(
                                     config.bottomLeft(data),
-                                    style: TextStyle(
-                                        fontSize: 11, color: bottomLeftColor),
+                                    style: TextStyle(fontSize: 11, color: bottomLeftColor),
                                   ),
                                 ),
                                 Expanded(
                                   child: Text(
                                     config.bottomRight(data),
-                                    style: const TextStyle(
-                                        fontSize: 11, color: Colors.black45),
+                                    style: const TextStyle(fontSize: 11, color: Colors.black45),
                                   ),
                                 ),
                               ],
@@ -433,8 +381,7 @@ class _HistoryPageState extends State<HistoryPage> {
                       IconButton(
                         icon: const Icon(Icons.delete, size: 17),
                         padding: EdgeInsets.zero,
-                        constraints:
-                            const BoxConstraints(minWidth: 32, minHeight: 32),
+                        constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
                         onPressed: () => _delete(doc.id, data),
                       ),
                     ],
