@@ -7,6 +7,7 @@ import 'package:final_printer/ui_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'firestore_service.dart';
+import 'preference.dart';
 
 class PrintCity extends PrinterJob {
   final String phoneNumber;
@@ -46,9 +47,11 @@ class PrintCity extends PrinterJob {
       leftSize: ReceiptTextSizeType.small,
       rightSize: ReceiptTextSizeType.small,
     );
+
     receipt.addSpacer();
+    final senderNumber = await getSenderNumber();
     receipt.addText(
-      '096 700 3269',
+      senderNumber,
       alignment: ReceiptAlignment.center,
       size: ReceiptTextSizeType.medium,
       style: ReceiptTextStyleType.normal,

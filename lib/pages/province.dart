@@ -3,6 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../print_province.dart';
 import '../ui_helper.dart';
 import 'province_history.dart';
+import '../preference.dart';
 
 class Province extends StatefulWidget {
   const Province({super.key});
@@ -13,7 +14,7 @@ class Province extends StatefulWidget {
 
 class _ProvinceState extends State<Province> with SingleTickerProviderStateMixin {
   // ── Controllers ──────────────────────────────────────────────────────────
-  final _fieldSender = TextEditingController()..text = '096 700 3269';
+  final _fieldSender = TextEditingController();
   final _fieldReceiver = TextEditingController();
   final _fieldDestination = TextEditingController();
   final _fieldNote = TextEditingController();
@@ -35,6 +36,7 @@ class _ProvinceState extends State<Province> with SingleTickerProviderStateMixin
   void initState() {
     super.initState();
     _loadSelectedDelivery();
+    _loadSenderNumber();
     _animController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 120),
@@ -42,6 +44,11 @@ class _ProvinceState extends State<Province> with SingleTickerProviderStateMixin
     _scaleAnimation = Tween<double>(begin: 1.0, end: 0.85).animate(
       CurvedAnimation(parent: _animController, curve: Curves.easeInOut),
     );
+  }
+
+  Future<void> _loadSenderNumber() async {
+    final saved = await getSenderNumber();
+    setState(() => _fieldSender.text = saved);
   }
 
   @override
@@ -184,25 +191,27 @@ class _ProvinceState extends State<Province> with SingleTickerProviderStateMixin
                 ),
 
                 // Sender field
+
                 SizedBox(
                   height: 70,
-                  child: TextField(
-                    controller: _fieldSender,
-                    readOnly: _senderReadOnly,
-                    inputFormatters: [buildMaskFormat()],
-                    style: textFieldStyle(),
-                    decoration: InputDecoration(
-                      enabledBorder: buildOutLineBorder(),
-                      focusedBorder: buildOutLineBorder(),
-                      filled: true,
-                      fillColor: Colors.white,
-                      labelText: 'លេខអ្នកផ្ញើ',
-                      labelStyle: labelStyle(),
-                      suffixIcon: IconButton(
-                        icon: const Icon(Icons.edit),
-                        onPressed: () => setState(() => _senderReadOnly = false),
-                      ),
-                    ),
+                  child: ValueListenableBuilder<String>(
+                    valueListenable: senderNumberNotifier,
+                    builder: (context, senderNumber, _) {
+                      _fieldSender.text = senderNumber;
+                      return TextField(
+                        controller: _fieldSender,
+                        readOnly: true,
+                        style: const TextStyle(color: Colors.black54, fontSize: 20),
+                        decoration: InputDecoration(
+                          enabledBorder: buildOutLineBorder(),
+                          focusedBorder: buildOutLineBorder(),
+                          filled: true,
+                          fillColor: Colors.white,
+                          labelText: 'លេខអ្នកផ្ញើ',
+                          labelStyle: labelStyle(),
+                        ),
+                      );
+                    },
                   ),
                 ),
                 const SizedBox(height: 20),
@@ -276,8 +285,7 @@ class _ProvinceState extends State<Province> with SingleTickerProviderStateMixin
                         child: GestureDetector(
                           onDoubleTap: () => _selectDelivery(item),
                           child: Container(
-                            padding: const EdgeInsets.symmetric(vertical: 10
-                            ),
+                            padding: const EdgeInsets.symmetric(vertical: 10),
                             decoration: BoxDecoration(
                               color: isSelected ? Colors.white : Colors.white,
                               borderRadius: BorderRadius.circular(20),

@@ -251,7 +251,7 @@ class _CityState extends State<City> with SingleTickerProviderStateMixin {
                       focusedBorder: buildOutLineBorder(),
                       filled: true,
                       fillColor: Colors.white,
-                      labelText: 'លេខទូរស័ព្ទ',
+                      labelText: 'លេខអ្នកទទួល',
                       labelStyle: labelStyle(),
                       errorText: _validateFieldPhone ? '' : null,
                       errorStyle: const TextStyle(color: Colors.white),

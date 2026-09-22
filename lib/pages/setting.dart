@@ -23,6 +23,36 @@ class _SettingState extends State<Setting> {
   bool _isLoading = false;
   int _loadingAtIndex = -1;
 
+  final _fieldSender = TextEditingController();
+  @override
+  void initState() {
+    super.initState();
+    _loadSenderNumber();
+  }
+
+  @override
+  void dispose() {
+    _fieldSender.dispose();
+    super.dispose();
+  }
+
+  Future<void> _loadSenderNumber() async {
+    final saved = await getSenderNumber();
+    setState(() => _fieldSender.text = saved);
+  }
+
+  Future<void> _saveSenderNumber() async {
+    final value = _fieldSender.text.trim();
+    if (value.isEmpty) {
+      showToast('ដាក់លេខអ្នកផ្ញើ');
+      return;
+    }
+    await setSenderNumber(value);
+    if (!mounted) return;
+    FocusScope.of(context).unfocus();
+    showToast('រក្សាទុករួចរាល់', color: Colors.green);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,6 +68,27 @@ class _SettingState extends State<Setting> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              Padding(
+                padding: const EdgeInsets.only(bottom: 20, right: 20, left: 20),
+                child: TextField(
+                  controller: _fieldSender,
+                  inputFormatters: [buildMaskFormat()],
+                  keyboardType: TextInputType.phone,
+                  style: const TextStyle(fontSize: 20),
+                  onEditingComplete: _saveSenderNumber,
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Colors.white,
+                    labelText: 'កំណត់លេខអ្នកផ្ញើ',
+                    labelStyle: labelStyle(),
+                    suffixIcon: IconButton(
+                      icon: const Icon(Icons.check),
+                      onPressed: _saveSenderNumber,
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 80),
               SafeArea(
                 child: _isLoading && _blueDevices.isEmpty
                     ? const Center(
@@ -60,7 +111,7 @@ class _SettingState extends State<Setting> {
                                                 ? _onDisconnectDevice
                                                 : () => _onSelectDevice(index),
                                             child: Padding(
-                                              padding: const EdgeInsets.all(8.0),
+                                              padding: const EdgeInsets.only(left: 25, right: 25),
                                               child: Column(
                                                 crossAxisAlignment: CrossAxisAlignment.start,
                                                 children: <Widget>[
@@ -68,7 +119,7 @@ class _SettingState extends State<Setting> {
                                                     _blueDevices[index].name,
                                                     style: TextStyle(
                                                       color: _selectedDevice?.address == _blueDevices[index].address ? Colors.blue : Colors.black,
-                                                      fontSize: 20,
+                                                      fontSize: 18,
                                                       fontWeight: FontWeight.w500,
                                                     ),
                                                   ),
@@ -97,21 +148,28 @@ class _SettingState extends State<Setting> {
                                             ),
                                           ),
                                         if (!_isLoading && _blueDevices[index].address == (_selectedDevice?.address ?? ''))
-                                          TextButton(
-                                            onPressed: _startPrint,
-                                            style: ButtonStyle(
-                                              backgroundColor: MaterialStateProperty.resolveWith<Color>(
-                                                (Set<MaterialState> states) {
-                                                  if (states.contains(MaterialState.pressed)) {
-                                                    return Theme.of(context).colorScheme.primary.withOpacity(0.5);
-                                                  }
-                                                  return Theme.of(context).primaryColor;
-                                                },
+                                          Padding(
+                                            padding: const EdgeInsets.only(right: 20),
+                                            child: TextButton(
+                                              onPressed: _startPrint,
+                                              style: ButtonStyle(
+                                                  backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                                                    (Set<MaterialState> states) {
+                                                      if (states.contains(MaterialState.pressed)) {
+                                                        return Colors.teal.withOpacity(0.5);
+                                                      }
+                                                      return Colors.teal;
+                                                    },
+                                                  ),
+                                                  shape: MaterialStateProperty.all(
+                                                    RoundedRectangleBorder(
+                                                      borderRadius: BorderRadius.circular(18),
+                                                    ),
+                                                  )),
+                                              child: const Text(
+                                                'Test Print',
+                                                style: TextStyle(color: Colors.white),
                                               ),
-                                            ),
-                                            child: const Text(
-                                              'Test Print',
-                                              style: TextStyle(color: Colors.white),
                                             ),
                                           ),
                                       ],
@@ -126,11 +184,7 @@ class _SettingState extends State<Setting> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: const <Widget>[
                                 Text(
-                                  'សូមភ្ជាប់ម៉ាស៊ីនព្រីនជាមួយ Bluetooth ទូរស័ព្ទជាមុនសិន',
-                                  style: TextStyle(fontSize: 15, color: Colors.blue),
-                                ),
-                                Text(
-                                  'បន្ទាប់មកចុចប៊ូតុងខាងក្រោម រួចចុចលើឈ្មោះម៉ាស៊ីនព្រីន។',
+                                  'ប៊ូតុងខាងក្រោម សម្រាប់ភ្ជាប់ម៉ាស៊ីនព្រីន',
                                   style: TextStyle(fontSize: 14),
                                 ),
                               ],
@@ -144,7 +198,7 @@ class _SettingState extends State<Setting> {
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
                   ),
                   onPressed: _isLoading ? null : _onScanPressed,
-                  child: const Text('SHOW')),
+                  child: const Text('Show Bluetooth Printer')),
             ],
           ),
         ),
@@ -218,7 +272,7 @@ class _SettingState extends State<Setting> {
     final String formatDate = DateFormat.yMd().add_jm().format(DateTime.now());
     final ReceiptSectionText receiptText = ReceiptSectionText();
     receiptText.addLeftRightText(formatDate, 'OK', leftSize: ReceiptTextSizeType.small, rightSize: ReceiptTextSizeType.small);
-    receiptText.addSpacer(useDashed: true, count: 3);
+    receiptText.addSpacer(count: 4);
 
     showToast('Printing...', color: Colors.green);
     await _bluePrintPos.printReceiptText(receiptText);

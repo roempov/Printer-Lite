@@ -2,11 +2,14 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:final_printer/pages/city.dart';
 import 'package:final_printer/pages/province.dart';
-import 'package:final_printer/pages/connect.dart';
+import 'package:final_printer/pages/setting.dart';
+
+import 'preference.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  await loadSenderNumberIntoNotifier();
   runApp(const MyApp());
 }
 
@@ -49,7 +52,7 @@ class _HomePageState extends State<HomePage> {
         destinations: const [
           NavigationDestination(selectedIcon: Icon(Icons.delivery_dining), icon: Icon(Icons.delivery_dining_outlined), label: 'Delivery'),
           NavigationDestination(selectedIcon: Icon(Icons.local_shipping), icon: Icon(Icons.local_shipping_outlined), label: 'Shipping'),
-          NavigationDestination(selectedIcon: Icon(Icons.bluetooth_audio), icon: Icon(Icons.bluetooth_outlined), label: 'Connect')
+          NavigationDestination(selectedIcon: Icon(Icons.settings), icon: Icon(Icons.settings), label: 'Setting')
         ],
       ),
     );
