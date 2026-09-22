@@ -7,7 +7,6 @@ import 'package:final_printer/ui_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'firestore_service.dart';
-import 'preference.dart';
 
 class PrintCity extends PrinterJob {
   final String phoneNumber;
@@ -27,7 +26,7 @@ class PrintCity extends PrinterJob {
   final String _dateTime = DateFormat('dd/MM/yyyy hh:mm a').format(DateTime.now());
 
   @override
-  String get disconnectMessage => 'បិទ បើកម៉ាស៊ីន ព្រីន';
+  String get disconnectMessage => 'សូមបិទ បើកម៉ាស៊ីន ព្រីន';
 
   @override
   Future<void> printAndSave() async {
@@ -105,7 +104,7 @@ class PrintCity extends PrinterJob {
       leftSize: ReceiptTextSizeType.small,
       rightSize: ReceiptTextSizeType.small,
     );
-    receipt.addSpacer(count: 3);
+    receipt.addSpacer(count: 2);
 
     showToast('Printing...', color: Colors.green);
 

@@ -126,12 +126,12 @@ class _SettingState extends State<Setting> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: const <Widget>[
                                 Text(
-                                  'Bluetooth Device',
-                                  style: TextStyle(fontSize: 24),
+                                  'សូមភ្ជាប់ម៉ាស៊ីនព្រីនជាមួយ Bluetooth ទូរស័ព្ទជាមុនសិន',
+                                  style: TextStyle(fontSize: 15, color: Colors.blue),
                                 ),
                                 Text(
-                                  'Press Button Scan',
-                                  style: TextStyle(fontSize: 14, color: Colors.grey),
+                                  'បន្ទាប់មកចុចប៊ូតុងខាងក្រោម រួចចុចលើឈ្មោះម៉ាស៊ីនព្រីន។',
+                                  style: TextStyle(fontSize: 14),
                                 ),
                               ],
                             ),
@@ -144,7 +144,7 @@ class _SettingState extends State<Setting> {
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
                   ),
                   onPressed: _isLoading ? null : _onScanPressed,
-                  child: const Text('SCAN')),
+                  child: const Text('SHOW')),
             ],
           ),
         ),
@@ -185,7 +185,7 @@ class _SettingState extends State<Setting> {
         });
       } else {
         setState(() => _isLoading = false);
-        showToast('Please turn on Bluetooth');
+        showToast('សូមបើក Bluetooth ទូរស័ព្ទ');
       }
     } catch (e) {
       setState(() => _isLoading = false);
@@ -218,7 +218,7 @@ class _SettingState extends State<Setting> {
     final String formatDate = DateFormat.yMd().add_jm().format(DateTime.now());
     final ReceiptSectionText receiptText = ReceiptSectionText();
     receiptText.addLeftRightText(formatDate, 'OK', leftSize: ReceiptTextSizeType.small, rightSize: ReceiptTextSizeType.small);
-    receiptText.addSpacer(useDashed: true);
+    receiptText.addSpacer(useDashed: true, count: 3);
 
     showToast('Printing...', color: Colors.green);
     await _bluePrintPos.printReceiptText(receiptText);
