@@ -7,7 +7,6 @@ import 'package:final_printer/ui_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'firestore_service.dart';
-import 'preference.dart';
 
 class PrintProvince extends PrinterJob {
   final String senderNum;
@@ -93,8 +92,6 @@ class PrintProvince extends PrinterJob {
       rightSize: ReceiptTextSizeType.small,
     );
     receipt.addSpacer(count: 3);
-
-    showToast('Printing...', color: Colors.green);
 
     final printSucceeded = await printReceipt(receipt);
 

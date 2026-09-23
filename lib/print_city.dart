@@ -109,8 +109,6 @@ class PrintCity extends PrinterJob {
     );
     receipt.addSpacer(count: 2);
 
-    showToast('Printing...', color: Colors.green);
-
     final printSucceeded = await printReceipt(receipt);
 
     if (printSucceeded) {

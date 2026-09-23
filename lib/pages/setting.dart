@@ -140,7 +140,7 @@ class _SettingState extends State<Setting> {
                                           Container(
                                             height: 24.0,
                                             width: 24.0,
-                                            margin: const EdgeInsets.only(right: 8.0),
+                                            margin: const EdgeInsets.only(right: 20, left: 20),
                                             child: const CircularProgressIndicator(
                                               valueColor: AlwaysStoppedAnimation<Color>(
                                                 Colors.blue,

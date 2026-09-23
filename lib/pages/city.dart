@@ -27,6 +27,7 @@ class _CityState extends State<City> with SingleTickerProviderStateMixin {
   bool _validateFieldAddress = false;
   String _formattedResult = '';
   double _multiplier = 4000;
+  bool _isPrinting = false;
 
   // Blocks anything that isn't: digits, at most one dot, at most 3 digits
 // after it. Runs before onChanged, so a second dot or a 4th decimal
@@ -115,7 +116,7 @@ class _CityState extends State<City> with SingleTickerProviderStateMixin {
   Future<void> _navigateToSettings() async {
     final result = await Navigator.push<double>(
       context,
-      MaterialPageRoute(builder: (_) => ExchangeRate()),
+      MaterialPageRoute(builder: (_) => const ExchangeRate()),
     );
     if (result != null) {
       setState(() => _multiplier = result);
@@ -124,7 +125,8 @@ class _CityState extends State<City> with SingleTickerProviderStateMixin {
   }
 
   Future<void> _onPrintPressed() async {
-    // Run animation
+    if (_isPrinting) return;
+
     await _animController.forward();
     await _animController.reverse();
 
@@ -152,15 +154,18 @@ class _CityState extends State<City> with SingleTickerProviderStateMixin {
       return;
     }
 
-    PrintCity(
-      phoneNumber: _fieldPhone.text,
-      address: _fieldAddress.text,
-      // amount stays the USD side, amountRiel stays the Riel side —
-      // just sourced from the swapped fields now.
-      amount: '${_fieldAmount.text}\$',
-      amountRiel: _formattedResult.replaceAll('៛', ''),
-      onSuccess: _clearFields,
-    ).preparePrint();
+    setState(() => _isPrinting = true);
+    try {
+      await PrintCity(
+        phoneNumber: _fieldPhone.text,
+        address: _fieldAddress.text,
+        amount: '${_fieldAmount.text}\$',
+        amountRiel: _formattedResult.replaceAll('៛', ''),
+        onSuccess: _clearFields,
+      ).preparePrint();
+    } finally {
+      if (mounted) setState(() => _isPrinting = false);
+    }
   }
 
   // ── Build ─────────────────────────────────────────────────────────────────
@@ -198,23 +203,31 @@ class _CityState extends State<City> with SingleTickerProviderStateMixin {
         floatingActionButton: ScaleTransition(
           scale: _scaleAnimation,
           child: Padding(
-            padding: const EdgeInsets.only(right: 10), // move left
+            padding: const EdgeInsets.only(right: 10),
             child: SizedBox(
               width: 75,
               height: 75,
               child: FloatingActionButton(
                 heroTag: null,
                 backgroundColor: Colors.pink.shade200,
-                onPressed: _onPrintPressed,
+                onPressed: _isPrinting ? null : _onPrintPressed,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(16),
                 ),
-                child: const Icon(Icons.print_rounded, size: 35),
+                child: _isPrinting
+                    ? const SizedBox(
+                  width: 28,
+                  height: 28,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 3,
+                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                  ),
+                )
+                    : const Icon(Icons.print_rounded, size: 35),
               ),
             ),
           ),
-        ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+        ),        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
 
         body: Padding(
           padding: const EdgeInsets.only(top: 10, left: 25, right: 25),

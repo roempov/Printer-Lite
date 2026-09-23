@@ -69,7 +69,7 @@ abstract class PrinterJob {
     }
 
     if (!matched) {
-      showToast('រកមិនឃើញម៉ាស៊ីនព្រីនដែលបានរក្សាទុក សូមភ្ជាប់នៅទំព័រ Connect');
+      showToast('រកមិនឃើញម៉ាស៊ីនព្រីនដែលបានរក្សាទុក សូមភ្ជាប់នៅទំព័រ Setting');
     }
   }
 

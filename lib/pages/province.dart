@@ -24,8 +24,8 @@ class _ProvinceState extends State<Province> with SingleTickerProviderStateMixin
   // ── State ─────────────────────────────────────────────────────────────────
   bool _validateFieldReceiver = false;
   bool _validateFieldDestination = false;
-  bool _senderReadOnly = true;
   String _deliverValue = 'វីរៈ ប៊ុនថាំ';
+  bool _isPrinting = false;
 
   static const String _keySelectedDelivery = 'pinnedDelivery'; // key kept as-is so existing saved prefs still load
 
@@ -81,11 +81,12 @@ class _ProvinceState extends State<Province> with SingleTickerProviderStateMixin
       _fieldNote.clear();
       _validateFieldReceiver = false;
       _validateFieldDestination = false;
-      _senderReadOnly = true;
     });
   }
 
   Future<void> _onPrintPressed() async {
+    if (_isPrinting) return;
+
     await _animController.forward();
     await _animController.reverse();
 
@@ -113,14 +114,19 @@ class _ProvinceState extends State<Province> with SingleTickerProviderStateMixin
       return;
     }
 
-    PrintProvince(
-      senderNum: _fieldSender.text,
-      receiverNum: _fieldReceiver.text,
-      destination: _fieldDestination.text,
-      delivery: _deliverValue,
-      note: _fieldNote.text,
-      onSuccess: _clearFields,
-    ).preparePrint();
+    setState(() => _isPrinting = true);
+    try {
+      await PrintProvince(
+        senderNum: _fieldSender.text,
+        receiverNum: _fieldReceiver.text,
+        destination: _fieldDestination.text,
+        delivery: _deliverValue,
+        note: _fieldNote.text,
+        onSuccess: _clearFields,
+      ).preparePrint();
+    } finally {
+      if (mounted) setState(() => _isPrinting = false);
+    }
   }
 
   // ── Build ─────────────────────────────────────────────────────────────────
@@ -158,11 +164,20 @@ class _ProvinceState extends State<Province> with SingleTickerProviderStateMixin
               child: FloatingActionButton(
                 heroTag: null,
                 backgroundColor: Colors.orange,
-                onPressed: _onPrintPressed,
+                onPressed: _isPrinting ? null : _onPrintPressed,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(16),
                 ),
-                child: const Icon(Icons.print_rounded, size: 35),
+                child: _isPrinting
+                    ? const SizedBox(
+                        width: 28,
+                        height: 28,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 3,
+                          valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                        ),
+                      )
+                    : const Icon(Icons.print_rounded, size: 35),
               ),
             ),
           ),
