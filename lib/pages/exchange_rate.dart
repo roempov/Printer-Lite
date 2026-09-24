@@ -7,7 +7,8 @@ class ExchangeRate extends StatefulWidget {
   const ExchangeRate({super.key});
 
   @override
-  State<ExchangeRate> createState() => _ExchangeRateState();}
+  State<ExchangeRate> createState() => _ExchangeRateState();
+}
 
 class _ExchangeRateState extends State<ExchangeRate> {
   final _controller = TextEditingController();
@@ -51,8 +52,7 @@ class _ExchangeRateState extends State<ExchangeRate> {
     setState(() {
       _multiplier = value;
       _controller.text = value.toStringAsFixed(0);
-      _controller.selection = TextSelection.collapsed(
-          offset: _controller.text.length);
+      _controller.selection = TextSelection.collapsed(offset: _controller.text.length);
     });
   }
 
@@ -87,12 +87,10 @@ class _ExchangeRateState extends State<ExchangeRate> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-
               // ── Current rate card ───────────────────────────────────────
               Container(
                 width: double.infinity,
-                padding: const EdgeInsets.symmetric(
-                    vertical: 20, horizontal: 20),
+                padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
                 decoration: BoxDecoration(
                   color: Colors.black87,
                   borderRadius: BorderRadius.circular(14),
@@ -101,8 +99,7 @@ class _ExchangeRateState extends State<ExchangeRate> {
                   children: [
                     const Text(
                       '1 USD =',
-                      style: TextStyle(
-                          color: Colors.white60, fontSize: 13),
+                      style: TextStyle(color: Colors.white60, fontSize: 13),
                     ),
                     const SizedBox(height: 6),
                     Row(
@@ -121,10 +118,7 @@ class _ExchangeRateState extends State<ExchangeRate> {
                           padding: EdgeInsets.only(bottom: 6, left: 6),
                           child: Text(
                             '៛',
-                            style: TextStyle(
-                                color: Colors.orange,
-                                fontSize: 24,
-                                fontWeight: FontWeight.bold),
+                            style: TextStyle(color: Colors.orange, fontSize: 24, fontWeight: FontWeight.bold),
                           ),
                         ),
                       ],
@@ -138,10 +132,7 @@ class _ExchangeRateState extends State<ExchangeRate> {
               // ── Quick presets ────────────────────────────────────────────
               const Text(
                 'ជ្រើសរើសរហ័ស',
-                style: TextStyle(
-                    fontSize: 12,
-                    color: Colors.black45,
-                    fontWeight: FontWeight.w500),
+                style: TextStyle(fontSize: 12, color: Colors.black45, fontWeight: FontWeight.w500),
               ),
               const SizedBox(height: 10),
               Row(
@@ -153,17 +144,12 @@ class _ExchangeRateState extends State<ExchangeRate> {
                       child: GestureDetector(
                         onTap: () => _selectPreset(preset),
                         child: Container(
-                          padding:
-                          const EdgeInsets.symmetric(vertical: 10),
+                          padding: const EdgeInsets.symmetric(vertical: 10),
                           decoration: BoxDecoration(
-                            color: isSelected
-                                ? Colors.black87
-                                : Colors.white,
+                            color: isSelected ? Colors.black87 : Colors.white,
                             borderRadius: BorderRadius.circular(10),
                             border: Border.all(
-                              color: isSelected
-                                  ? Colors.black87
-                                  : Colors.grey.shade300,
+                              color: isSelected ? Colors.black87 : Colors.grey.shade300,
                             ),
                           ),
                           child: Text(
@@ -172,9 +158,7 @@ class _ExchangeRateState extends State<ExchangeRate> {
                             style: TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.w600,
-                              color: isSelected
-                                  ? Colors.white
-                                  : Colors.black87,
+                              color: isSelected ? Colors.white : Colors.black87,
                             ),
                           ),
                         ),
@@ -189,10 +173,7 @@ class _ExchangeRateState extends State<ExchangeRate> {
               // ── Manual input ─────────────────────────────────────────────
               const Text(
                 'បញ្ចូលដោយខ្លួនឯង',
-                style: TextStyle(
-                    fontSize: 12,
-                    color: Colors.black45,
-                    fontWeight: FontWeight.w500),
+                style: TextStyle(fontSize: 12, color: Colors.black45, fontWeight: FontWeight.w500),
               ),
               const SizedBox(height: 10),
               Container(
@@ -205,19 +186,15 @@ class _ExchangeRateState extends State<ExchangeRate> {
                   controller: _controller,
                   onChanged: _updateMultiplier,
                   keyboardType: TextInputType.number,
-                  style: const TextStyle(
-                      fontSize: 22, fontWeight: FontWeight.bold),
+                  style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
                   textAlign: TextAlign.center,
                   decoration: InputDecoration(
                     border: InputBorder.none,
-                    contentPadding: const EdgeInsets.symmetric(
-                        horizontal: 16, vertical: 14),
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
                     hintText: '4000',
-                    hintStyle: TextStyle(
-                        color: Colors.grey.shade300, fontSize: 22),
+                    hintStyle: TextStyle(color: Colors.grey.shade300, fontSize: 22),
                     suffixIcon: IconButton(
-                      icon: Icon(Icons.clear,
-                          color: Colors.grey.shade400, size: 18),
+                      icon: Icon(Icons.clear, color: Colors.grey.shade400, size: 18),
                       onPressed: () {
                         _controller.clear();
                         setState(() {
@@ -234,11 +211,8 @@ class _ExchangeRateState extends State<ExchangeRate> {
               // ── USD preview ──────────────────────────────────────────────
               Center(
                 child: Text(
-                  _multiplier > 0
-                      ? '10,000៛  =  ${(10000 / _multiplier).toStringAsFixed(2)}\$'
-                      : '',
-                  style: const TextStyle(
-                      fontSize: 13, color: Colors.black45),
+                  _multiplier > 0 ? '10,000៛  =  ${(10000 / _multiplier).toStringAsFixed(2)}\$' : '',
+                  style: const TextStyle(fontSize: 13, color: Colors.black45),
                 ),
               ),
 
@@ -259,14 +233,13 @@ class _ExchangeRateState extends State<ExchangeRate> {
                   ),
                   child: const Text(
                     'Save',
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600),
+                    style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600),
                   ),
                 ),
               ),
-              const SizedBox(height: 25,)
+              const SizedBox(
+                height: 25,
+              )
             ],
           ),
         ),

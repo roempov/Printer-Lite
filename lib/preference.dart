@@ -16,13 +16,11 @@ Future<String?> getDeviceAddress() async {
 
 /// Holds the current sender number in memory so any page can listen for
 /// changes without needing to reload from SharedPreferences manually.
-final ValueNotifier<String> senderNumberNotifier =
-ValueNotifier<String>('096 700 3269');
+final ValueNotifier<String> senderNumberNotifier = ValueNotifier<String>('096 700 3269');
 
 Future<void> loadSenderNumberIntoNotifier() async {
   final prefs = await SharedPreferences.getInstance();
-  senderNumberNotifier.value =
-      prefs.getString(_keySenderNumber) ?? '096 700 3269';
+  senderNumberNotifier.value = prefs.getString(_keySenderNumber) ?? '096 700 3269';
 }
 
 Future setSenderNumber(String number) async {

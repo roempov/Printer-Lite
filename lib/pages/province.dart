@@ -216,7 +216,7 @@ class _ProvinceState extends State<Province> with SingleTickerProviderStateMixin
                       return TextField(
                         controller: _fieldSender,
                         readOnly: true,
-                        style: const TextStyle(color: Colors.black54, fontSize: 20),
+                        style: const TextStyle(color: Colors.black54, fontSize: 22),
                         decoration: InputDecoration(
                           enabledBorder: buildOutLineBorder(),
                           focusedBorder: buildOutLineBorder(),

@@ -216,18 +216,19 @@ class _CityState extends State<City> with SingleTickerProviderStateMixin {
                 ),
                 child: _isPrinting
                     ? const SizedBox(
-                  width: 28,
-                  height: 28,
-                  child: CircularProgressIndicator(
-                    strokeWidth: 3,
-                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                  ),
-                )
+                        width: 28,
+                        height: 28,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 3,
+                          valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                        ),
+                      )
                     : const Icon(Icons.print_rounded, size: 35),
               ),
             ),
           ),
-        ),        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
 
         body: Padding(
           padding: const EdgeInsets.only(top: 10, left: 25, right: 25),
